@@ -1,3 +1,11 @@
+import { isObject } from 'shared/util'
+
+declare global {
+  interface Window {
+    __adobe_cep__: any // 👈️ turn off type checking
+  }
+}
+
 // can we use __proto__?
 export const hasProto = '__proto__' in {}
 
@@ -12,6 +20,9 @@ export const isIOS = UA && /iphone|ipad|ipod|ios/.test(UA)
 export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge
 export const isPhantomJS = UA && /phantomjs/.test(UA)
 export const isFF = UA && UA.match(/firefox\/(\d+)/)
+export const isCEP = inBrowser && isObject(window.__adobe_cep__)
+export const isMAC =
+  inBrowser && /mac/.test(window.navigator.platform.toLowerCase())
 
 // Firefox has a "watch" function on Object.prototype...
 // @ts-expect-error firebox support
