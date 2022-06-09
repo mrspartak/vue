@@ -1,6 +1,6 @@
 import { isDef, isUndef } from 'shared/util'
 import { updateListeners } from 'core/vdom/helpers/index'
-import { isIE, isFF, supportsPassive, isUsingMicroTask } from 'core/util/index'
+import { isIE, isFF, isCEP, isMAC, supportsPassive, isUsingMicroTask } from 'core/util/index'
 import {
   RANGE_TOKEN,
   CHECKBOX_RADIO_TOKEN
@@ -75,6 +75,9 @@ function add(
         // #9462 iOS 9 bug: event.timeStamp is 0 after history.pushState
         // #9681 QtWebEngine event.timeStamp is negative value
         e.timeStamp <= 0 ||
+        // #10366 Adobe CEP bug: event.timeStamp is not reliable on macOS for
+        // host applications with CEP
+        (isCEP && isMAC) ||
         // #9448 bail if event is fired in another document in a multi-page
         // electron/nw.js app, since event.timeStamp will be using a different
         // starting reference
